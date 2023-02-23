@@ -2,28 +2,47 @@
 using static System.Console;
 
 Clear();
-int size = Promt("Введите размер массива: ");
-int number = Promt("Введите число, с которого заполнять массив: ");
-int[,] array = new int[size, size];
-FillArray(array, number);
-PrintArray(array);
-
-
-int[,] FillArray(int[,] inArray, int number)
+int size = Promt("Введите размер массива (число от 2 до 9): ");
+if (size < 10 && size > 1)
 {
+    int[,] resArray = FillArray(size);
+    string[,] strArray = GetStringArray(resArray);
+    PrintArray(strArray);
+}
+else
+{
+    WriteLine("Ошибка ввода!");
+    return;
+}
+string[,] GetStringArray(int[,] inArray)
+{
+    string[,] resArray = new string[inArray.GetLength(0), inArray.GetLength(1)];
+    for (int i = 0; i < resArray.GetLength(0); i++)
+    {
+        for (int j = 0; j < resArray.GetLength(1); j++)
+        {
+            resArray[i, j] = (inArray[i, j] < 10) ? "0" + Convert.ToString(inArray[i, j]) : Convert.ToString(inArray[i, j]);
+        }
+    }
+    return resArray;
+}
+int[,] FillArray(int size)
+{
+    int[,] resArray = new int[size, size];
+    int number = 1;
     int x = 0;
     int y = -1;
     int movRow = 0;
     int movCol = 1;
-    while (number < inArray.GetLength(0) * inArray.GetLength(1))
+    while (number <= resArray.GetLength(0) * resArray.GetLength(1))
     {
-        if ((x + movRow >= 0 && x + movRow < number)
-        && (y + movCol >= 0 && y + movCol < number)
-        && inArray[x + movRow, y + movCol] == 0)
+        if ((x + movRow >= 0 && x + movRow < size)
+        && (y + movCol >= 0 && y + movCol < size)
+        && resArray[x + movRow, y + movCol] == 0)
         {
             x += movRow;
             y += movCol;
-            inArray[x, y] = number;
+            resArray[x, y] = number;
             number++;
         }
         else
@@ -50,9 +69,9 @@ int[,] FillArray(int[,] inArray, int number)
             }
         }
     }
-    return inArray;
+    return resArray;
 }
-void PrintArray(int[,] inArray)
+void PrintArray(string[,] inArray)
 {
     for (int i = 0; i < inArray.GetLength(0); i++)
     {
